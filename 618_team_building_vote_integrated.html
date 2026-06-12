@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>618后团队团建目的地投票</title>
+  <style>
+    :root {
+      --green: #0f6b4f;
+      --green2: #2e8b6f;
+      --cream: #f7f3ea;
+      --ink: #1f2933;
+      --muted: #68727d;
+      --card: rgba(255,255,255,0.88);
+      --line: rgba(15,107,79,0.14);
+      --shadow: 0 22px 60px rgba(20, 47, 38, 0.16);
+      --radius: 28px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(46,139,111,0.24), transparent 34%),
+        radial-gradient(circle at 80% 10%, rgba(224,185,109,0.22), transparent 32%),
+        linear-gradient(135deg, #f8f4ec 0%, #edf6f0 52%, #f6f1e7 100%);
+      min-height: 100vh;
+    }
+
+    .hero {
+      width: min(1180px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 56px 0 24px;
+    }
+
+    .hero-panel {
+      position: relative;
+      overflow: hidden;
+      border-radius: 36px;
+      padding: 44px;
+      min-height: 350px;
+      box-shadow: var(--shadow);
+      color: white;
+      background:
+        linear-gradient(90deg, rgba(8,48,40,0.80), rgba(8,48,40,0.35)),
+        url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80") center/cover;
+    }
+
+    .hero-panel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 78% 22%, rgba(255,255,255,0.22), transparent 20%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      border: 1px solid rgba(255,255,255,0.34);
+      background: rgba(255,255,255,0.12);
+      border-radius: 999px;
+      backdrop-filter: blur(10px);
+      font-size: 14px;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      position: relative;
+      z-index: 1;
+      margin: 24px 0 14px;
+      font-size: clamp(34px, 5vw, 64px);
+      line-height: 1.02;
+      letter-spacing: -0.06em;
+      max-width: 780px;
+    }
+
+    .subtitle {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      font-size: 18px;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.9);
+      margin: 0;
+    }
+
+    .hero-actions {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .primary-link,
+    .secondary-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: transform 0.18s ease, filter 0.18s ease;
+    }
+
+    .primary-link {
+      color: var(--green);
+      background: white;
+    }
+
+    .secondary-link {
+      color: white;
+      border: 1px solid rgba(255,255,255,0.34);
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(10px);
+    }
+
+    .primary-link:hover,
+    .secondary-link:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+    }
+
+    .meta-row {
+      position: relative;
+      z-index: 1;
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.22);
+      backdrop-filter: blur(10px);
+      font-size: 14px;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .section {
+      width: min(1180px, calc(100% - 36px));
+      margin: 0 auto 56px;
+    }
+
+    .notice {
+      margin: 4px 0 22px;
+      border-radius: 24px;
+      padding: 18px 20px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(255,255,255,0.72);
+      color: #41504a;
+      line-height: 1.7;
+      box-shadow: 0 12px 35px rgba(31,41,51,0.08);
+    }
+
+    .notice strong { color: var(--green); }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      margin: 28px 4px 18px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -0.04em;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.72);
+      box-shadow: 0 16px 42px rgba(31,41,51,0.10);
+      backdrop-filter: blur(14px);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 28px 70px rgba(31,41,51,0.16);
+    }
+
+    .image-wrap {
+      position: relative;
+      height: 238px;
+      overflow: hidden;
+    }
+
+    .image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scale(1.03);
+      transition: transform 0.6s ease;
+    }
+
+    .card:hover img { transform: scale(1.09); }
+
+    .tag {
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      padding: 8px 11px;
+      border-radius: 999px;
+      color: white;
+      background: rgba(8,48,40,0.72);
+      backdrop-filter: blur(10px);
+      font-size: 13px;
+      border: 1px solid rgba(255,255,255,0.22);
+    }
+
+    .body {
+      padding: 20px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .title-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: baseline;
+    }
+
+    .title-line h3 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+    }
+
+    .region {
+      color: var(--green);
+      font-weight: 800;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .desc {
+      color: #43505b;
+      margin: 0;
+      line-height: 1.65;
+      font-size: 14.5px;
+      min-height: 96px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .chip {
+      font-size: 12.5px;
+      color: #285748;
+      background: rgba(46,139,111,0.10);
+      border: 1px solid rgba(46,139,111,0.13);
+      border-radius: 999px;
+      padding: 6px 9px;
+    }
+
+    .vote-btn {
+      margin-top: 10px;
+      width: 100%;
+      border: 0;
+      border-radius: 16px;
+      padding: 13px 14px;
+      background: linear-gradient(135deg, var(--green), var(--green2));
+      color: white;
+      font-weight: 900;
+      font-size: 15px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      display: block;
+      transition: transform 0.18s ease, filter 0.18s ease;
+    }
+
+    .vote-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+    }
+
+    .compare {
+      margin-top: 26px;
+      border-radius: 28px;
+      padding: 24px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(255,255,255,0.74);
+      box-shadow: var(--shadow);
+      overflow-x: auto;
+    }
+
+    .compare h2 {
+      margin: 0 0 16px;
+      font-size: 26px;
+      letter-spacing: -0.04em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+      overflow: hidden;
+      border-radius: 18px;
+    }
+
+    th, td {
+      padding: 14px 13px;
+      border-bottom: 1px solid rgba(15,107,79,0.10);
+      text-align: left;
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    th {
+      color: var(--green);
+      background: rgba(15,107,79,0.07);
+      font-weight: 900;
+    }
+
+    td:first-child {
+      font-weight: 900;
+      color: #26332e;
+    }
+
+    .bottom-vote {
+      margin-top: 22px;
+      border-radius: 28px;
+      padding: 28px;
+      color: white;
+      background: linear-gradient(135deg, #0f6b4f, #2e8b6f);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .bottom-vote h2 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+
+    .bottom-vote p {
+      margin: 0;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.7;
+    }
+
+    .bottom-vote a {
+      flex: 0 0 auto;
+      color: var(--green);
+      background: white;
+      padding: 14px 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 900;
+    }
+
+    .admin-note {
+      margin-top: 16px;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 13.5px;
+    }
+
+    @media (max-width: 1120px) {
+      .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 760px) {
+      .hero { width: min(100% - 24px, 1180px); padding-top: 24px; }
+      .hero-panel { padding: 28px; border-radius: 28px; min-height: 430px; }
+      .section { width: min(100% - 24px, 1180px); }
+      .section-head { flex-direction: column; align-items: flex-start; }
+      .grid { grid-template-columns: 1fr; }
+      .image-wrap { height: 272px; }
+      .desc { min-height: auto; }
+      .bottom-vote { align-items: flex-start; }
+      .bottom-vote a { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="hero">
+    <div class="hero-panel">
+      <div class="eyebrow">PURCOTTON TEAM VOTE · 618后回血团建</div>
+      <h1>选一个地方，给团队换一口气</h1>
+      <p class="subtitle">
+        这是一页“种草 + 投票”合一的团建目的地页面。先看风景和理由，再点击投票按钮进入正式问卷，所有结果统一在飞书/腾讯问卷后台统计。
+      </p>
+      <div class="hero-actions">
+        <a class="primary-link" id="heroVoteLink" href="#" target="_blank" rel="noopener">直接进入正式投票</a>
+        <a class="secondary-link" href="#destinations">先看看候选地</a>
+      </div>
+      <div class="meta-row">
+        <span class="pill">低强度</span>
+        <span class="pill">风景好</span>
+        <span class="pill">适合团队</span>
+        <span class="pill">统一问卷统计</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="notice">
+      <strong>使用方式：</strong>你先在飞书/腾讯问卷创建一个单选题：你最想去哪个团建目的地？选项填“富国岛、沙溪古镇、安吉、阳朔、西双版纳”。然后把问卷链接替换到本 HTML 顶部脚本里的 <strong>FORM_LINK</strong>，这页就会变成正式投票入口。
+    </div>
+
+    <div class="section-head" id="destinations">
+      <div>
+        <h2>候选目的地</h2>
+        <p>每个目的地都可以直接跳转到正式问卷。为避免统计混乱，真实票数以问卷后台为准。</p>
+      </div>
+    </div>
+
+    <div class="grid" id="cards"></div>
+
+    <section class="compare">
+      <h2>怎么选，一眼看懂</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>目的地</th>
+            <th>最适合的团队状态</th>
+            <th>核心记忆点</th>
+            <th>我的判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>富国岛</td>
+            <td>618后很累，想真正躺平回血</td>
+            <td>海岛、落日、酒店、海鲜</td>
+            <td>最像奖励游，适合让团队彻底松下来</td>
+          </tr>
+          <tr>
+            <td>沙溪古镇</td>
+            <td>小团队，想安静复盘和慢生活</td>
+            <td>古镇、咖啡、白族文化、松弛感</td>
+            <td>最有审美和人文气质，但不适合太大团</td>
+          </tr>
+          <tr>
+            <td>安吉</td>
+            <td>江浙沪出发，想省心稳定</td>
+            <td>竹海、山野、白茶、度假酒店</td>
+            <td>组织最稳，成本和距离都更可控</td>
+          </tr>
+          <tr>
+            <td>阳朔</td>
+            <td>想看强风景，但不想高原和徒步</td>
+            <td>漓江、遇龙河、喀斯特山水</td>
+            <td>风景辨识度最强，适合拍照和轻松游</td>
+          </tr>
+          <tr>
+            <td>西双版纳</td>
+            <td>年轻团队，想热闹、好吃、异域感</td>
+            <td>热带植物、傣味、夜市、泳池</td>
+            <td>快乐氛围强，但夏季要注意热和雨</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="bottom-vote">
+      <div>
+        <h2>看完了？现在去正式投票</h2>
+        <p>点击后进入飞书/腾讯问卷，所有人的投票会统一汇总，方便你直接看结果、导出表格。</p>
+      </div>
+      <a id="bottomVoteLink" href="#" target="_blank" rel="noopener">进入正式投票</a>
+    </section>
+
+    <div class="admin-note">
+      管理员提示：如果你用腾讯问卷/飞书表单，建议打开“每人限填一次”或“收集姓名/部门”。如果想让点击不同目的地时自动带入选项，需要问卷系统支持 URL 参数预填；一般内部投票不强求，进入问卷后手动选择更稳。
+    </div>
+  </main>
+
+  <script>
+    /*
+      请把下面这个链接替换成你的飞书表单/腾讯问卷链接。
+      例如：
+      const FORM_LINK = "https://wj.qq.com/s2/xxxxxx/";
+      或：
+      const FORM_LINK = "https://p9h0xxxxx.feishu.cn/share/base/form/shrcnxxxx";
+    */
+    const FORM_LINK = "请在这里替换成你的飞书或腾讯问卷链接";
+
+    const places = [
+      {
+        id: "phuquoc",
+        name: "富国岛",
+        region: "越南",
+        tag: "海岛度假",
+        image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=85",
+        desc: "适合真正放空：海边酒店、落日、跳岛、海鲜和轻松晚宴。它的优势不是文化厚度，而是让团队快速从618高压中松下来。",
+        chips: ["海岛", "落日", "躺平", "异国感"]
+      },
+      {
+        id: "shaxi",
+        name: "沙溪古镇",
+        region: "云南",
+        tag: "古镇松弛",
+        image: "https://images.unsplash.com/photo-1562577309-4932fdd64cd1?auto=format&fit=crop&w=1200&q=85",
+        desc: "比大理更安静，比丽江更克制。适合小团队做复盘、喝咖啡、逛古戏台和古街，整体气质是慢、轻、有人文感。",
+        chips: ["安静", "人文", "咖啡", "复盘"]
+      },
+      {
+        id: "anji",
+        name: "安吉",
+        region: "江浙",
+        tag: "竹海山野",
+        image: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=85",
+        desc: "江浙沪最成熟的山野团建选择之一：竹海、白茶山、度假酒店、漂流/咖啡/下午茶都能组合，组织难度低。",
+        chips: ["竹海", "近", "酒店多", "团建稳"]
+      },
+      {
+        id: "yangshuo",
+        name: "阳朔",
+        region: "广西",
+        tag: "山水画卷",
+        image: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1200&q=85",
+        desc: "山水辨识度最强：漓江、遇龙河、喀斯特山峰、竹筏和田园风光。适合不想高原、不想走远、但想要风景记忆点的团队。",
+        chips: ["山水", "竹筏", "轻松", "好拍"]
+      },
+      {
+        id: "banna",
+        name: "西双版纳",
+        region: "云南",
+        tag: "热带快乐",
+        image: "https://images.unsplash.com/photo-1541410965313-d53b3c16ef17?auto=format&fit=crop&w=1200&q=85",
+        desc: "热带植物、傣味、夜市、酒店泳池和异域氛围。适合年轻团队，晚上氛围最好，但6月底要注意热和雨。",
+        chips: ["热带", "夜市", "傣味", "年轻"]
+      }
+    ];
+
+    function getFormLink(placeName) {
+      if (!FORM_LINK || FORM_LINK.includes("请在这里替换")) {
+        return "#";
+      }
+      return FORM_LINK;
+    }
+
+    function handleVoteClick(event, placeName) {
+      if (!FORM_LINK || FORM_LINK.includes("请在这里替换")) {
+        event.preventDefault();
+        alert("还没有填入正式问卷链接。请先在 HTML 顶部脚本里把 FORM_LINK 替换成飞书/腾讯问卷链接。");
+        return false;
+      }
+      return true;
+    }
+
+    function renderCards() {
+      const cards = document.getElementById("cards");
+      cards.innerHTML = places.map(p => `
+        <article class="card">
+          <div class="image-wrap">
+            <img src="${p.image}" alt="${p.region}${p.name}风景照片" loading="lazy" />
+            <div class="tag">${p.tag}</div>
+          </div>
+          <div class="body">
+            <div class="title-line">
+              <h3>${p.name}</h3>
+              <span class="region">${p.region}</span>
+            </div>
+            <p class="desc">${p.desc}</p>
+            <div class="chips">${p.chips.map(c => `<span class="chip">${c}</span>`).join("")}</div>
+            <a class="vote-btn" href="${getFormLink(p.name)}" target="_blank" rel="noopener" onclick="return handleVoteClick(event, '${p.name}')">我要投 ${p.name}</a>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function bindHeroLinks() {
+      const hero = document.getElementById("heroVoteLink");
+      const bottom = document.getElementById("bottomVoteLink");
+
+      [hero, bottom].forEach(link => {
+        link.href = getFormLink("");
+        link.onclick = function(event) {
+          return handleVoteClick(event, "");
+        };
+      });
+    }
+
+    renderCards();
+    bindHeroLinks();
+  </script>
+</body>
+</html>
